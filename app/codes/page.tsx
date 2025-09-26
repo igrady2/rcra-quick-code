@@ -33,7 +33,6 @@ function CopyButton({ textToCopy }: { textToCopy: string }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 1200);
     } catch {
-      // Fallback prompt if clipboard fails
       window.prompt("Copy this text:", textToCopy);
     }
   }
@@ -48,6 +47,7 @@ function CopyButton({ textToCopy }: { textToCopy: string }) {
 export default function CodesPage() {
   const [q, setQ] = useState("");
   const [debouncedQ, setDebouncedQ] = useState("");
+  const [activeIdx, setActiveIdx] = useState<number>(-1); // highlighted row index
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Ctrl/Cmd+K focuses the search input
@@ -64,13 +64,13 @@ export default function CodesPage() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Debounce
+  // Debounce the query to keep UI snappy
   useEffect(() => {
     const id = setTimeout(() => setDebouncedQ(q), 120);
     return () => clearTimeout(id);
   }, [q]);
 
-  // Build Fuse index once (memoized)
+  // Build Fuse index once
   const fuse = useMemo(
     () =>
       new Fuse(WASTE_CODES, {
@@ -83,11 +83,30 @@ export default function CodesPage() {
 
   const data = useMemo(() => {
     const term = debouncedQ.trim();
-    if (!term) return WASTE_CODES;
-    return fuse.search(term).map((r) => r.item);
+    const list = term ? fuse.search(term).map((r) => r.item) : WASTE_CODES;
+    // reset active index when results change
+    setActiveIdx(list.length ? 0 : -1);
+    return list;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedQ, fuse]);
 
   const version = datasetVersion(WASTE_CODES);
+
+  // Keyboard navigation while focus is in the search input
+  function onSearchKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (!data.length) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIdx((i) => (i < data.length - 1 ? i + 1 : 0));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIdx((i) => (i > 0 ? i - 1 : data.length - 1));
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      const item = data[Math.max(0, activeIdx)];
+      if (item?.cfr_url) window.open(item.cfr_url, "_blank", "noopener,noreferrer");
+    }
+  }
 
   return (
     <section aria-labelledby="codes-heading">
@@ -97,9 +116,7 @@ export default function CodesPage() {
           <span>
             Dataset version: <strong>{version}</strong>
           </span>
-          <span className="opacity-80">
-            Source: 40 CFR Part 261 (eCFR) & EPA references
-          </span>
+          <span className="opacity-80">Source: 40 CFR Part 261 (eCFR) & EPA references</span>
         </div>
       </div>
 
@@ -109,7 +126,7 @@ export default function CodesPage() {
 
       <div className="mb-4">
         <label htmlFor="code-search" className="block text-sm font-medium mb-1">
-          Search codes or keywords <span className="text-gray-500">(Ctrl/⌘ + K)</span>
+          Search codes or keywords <span className="text-gray-500">(Ctrl/⌘ + K · ↑/↓ then Enter)</span>
         </label>
         <div className="flex gap-2">
           <Input
@@ -118,45 +135,62 @@ export default function CodesPage() {
             placeholder="e.g., D001, ignitable, acetone"
             value={q}
             onChange={(e) => setQ(e.target.value)}
+            onKeyDown={onSearchKeyDown}
           />
-          <Button variant="secondary" onClick={() => setQ("")}>Clear</Button>
+          <Button variant="secondary" onClick={() => setQ("")}>
+            Clear
+          </Button>
         </div>
       </div>
 
-      <div className="overflow-x-auto border rounded-lg">
+      <div className="overflow-x-auto border rounded-lg" role="region" aria-label="Search results">
         <table className="min-w-full text-sm" role="table">
           <thead className="bg-gray-50">
             <tr className="text-left">
-              <th scope="col" className="px-4 py-3">Code</th>
-              <th scope="col" className="px-4 py-3">Type</th>
-              <th scope="col" className="px-4 py-3">Title</th>
-              <th scope="col" className="px-4 py-3 hidden md:table-cell">Description</th>
-              <th scope="col" className="px-4 py-3">CFR</th>
+              <th scope="col" className="px-4 py-3">
+                Code
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Type
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Title
+              </th>
+              <th scope="col" className="px-4 py-3 hidden md:table-cell">
+                Description
+              </th>
+              <th scope="col" className="px-4 py-3">
+                CFR
+              </th>
               <th scope="col" className="px-4 py-3" aria-label="Copy actions"></th>
             </tr>
           </thead>
           <tbody>
-            {data.map((row) => (
-              <tr key={row.code} className="border-t">
-                <th scope="row" className="px-4 py-2 font-medium">{row.code}</th>
-                <td className="px-4 py-2">{row.type}</td>
-                <td className="px-4 py-2">{row.title}</td>
-                <td className="px-4 py-2 hidden md:table-cell">{row.description}</td>
-                <td className="px-4 py-2">
-                  <a
-                    className="underline"
-                    href={row.cfr_url}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {row.cfr_ref}
-                  </a>
-                </td>
-                <td className="px-4 py-2 text-right">
-                  <CopyButton textToCopy={`${row.code} — ${row.title} — ${row.cfr_ref}`} />
-                </td>
-              </tr>
-            ))}
+            {data.map((row, i) => {
+              const active = i === activeIdx;
+              return (
+                <tr
+                  key={row.code}
+                  className={`border-t ${active ? "bg-blue-50" : ""}`}
+                  aria-selected={active || undefined}
+                >
+                  <th scope="row" className="px-4 py-2 font-medium">
+                    {row.code}
+                  </th>
+                  <td className="px-4 py-2">{row.type}</td>
+                  <td className="px-4 py-2">{row.title}</td>
+                  <td className="px-4 py-2 hidden md:table-cell">{row.description}</td>
+                  <td className="px-4 py-2">
+                    <a className="underline" href={row.cfr_url} target="_blank" rel="noreferrer">
+                      {row.cfr_ref}
+                    </a>
+                  </td>
+                  <td className="px-4 py-2 text-right">
+                    <CopyButton textToCopy={`${row.code} — ${row.title} — ${row.cfr_ref}`} />
+                  </td>
+                </tr>
+              );
+            })}
             {data.length === 0 && (
               <tr>
                 <td className="px-4 py-6 text-center text-gray-500" colSpan={6}>
