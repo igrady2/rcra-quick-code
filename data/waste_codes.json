@@ -1,16 +1,95 @@
 [
-  { "code": "D001", "type": "Characteristic", "title": "Ignitable waste", "description": "Liquids with flash point < 60 °C (140 °F), non-liquids that cause fire through friction/absorption, compressed ignitable gases, oxidizers.", "cfr_ref": "40 CFR 261.21" },
-  { "code": "D002", "type": "Characteristic", "title": "Corrosive waste", "description": "Aqueous waste with pH ≤ 2 or ≥ 12.5, or liquids that corrode steel at a specified rate.", "cfr_ref": "40 CFR 261.22" },
-  { "code": "D003", "type": "Characteristic", "title": "Reactive waste", "description": "Unstable/reacts violently with water, forms toxic gases, cyanide/sulfide-bearing that release toxic gases under conditions.", "cfr_ref": "40 CFR 261.23" },
-  { "code": "D004", "type": "Characteristic", "title": "Toxicity characteristic (Arsenic)", "description": "Fails TCLP for arsenic (≥ regulatory level).", "cfr_ref": "40 CFR 261.24" },
+  {
+    "code": "D001",
+    "type": "Characteristic",
+    "title": "Ignitable waste",
+    "description": "Liquids with flash point < 60 °C (140 °F); certain non-liquids; ignitable compressed gases; oxidizers.",
+    "cfr_ref": "40 CFR 261.21",
+    "cfr_url": "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-I/part-261/section-261.21",
+    "last_updated": "2025-09-25"
+  },
+  {
+    "code": "D002",
+    "type": "Characteristic",
+    "title": "Corrosive waste",
+    "description": "Aqueous pH ≤ 2 or ≥ 12.5, or liquid that corrodes steel at a specified rate.",
+    "cfr_ref": "40 CFR 261.22",
+    "cfr_url": "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-I/part-261/section-261.22",
+    "last_updated": "2025-09-25"
+  },
+  {
+    "code": "D003",
+    "type": "Characteristic",
+    "title": "Reactive waste",
+    "description": "Unstable, reacts violently with water, forms toxic gases, or meets other reactivity criteria.",
+    "cfr_ref": "40 CFR 261.23",
+    "cfr_url": "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-I/part-261/section-261.23",
+    "last_updated": "2025-09-25"
+  },
+  {
+    "code": "D004",
+    "type": "Characteristic",
+    "title": "Toxicity characteristic (Arsenic)",
+    "description": "Fails TCLP at or above the regulatory level for arsenic.",
+    "cfr_ref": "40 CFR 261.24",
+    "cfr_url": "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-I/part-261/section-261.24",
+    "last_updated": "2025-09-25"
+  },
 
-  { "code": "F001", "type": "F-listed", "title": "Spent halogenated solvents (TCE, PCE, etc.) used in degreasing", "description": "Spent halogenated solvents used in degreasing operations.", "cfr_ref": "40 CFR 261.31" },
-  { "code": "F002", "type": "F-listed", "title": "Spent halogenated solvents (not limited to degreasing)", "description": "Spent halogenated solvents used in other operations.", "cfr_ref": "40 CFR 261.31" },
-  { "code": "F003", "type": "F-listed", "title": "Spent non-halogenated solvents (e.g., acetone, methanol)", "description": "Spent non-halogenated solvents.", "cfr_ref": "40 CFR 261.31" },
-  { "code": "F005", "type": "F-listed", "title": "Other spent non-halogenated solvents (e.g., toluene, MEK)", "description": "Other listed non-halogenated spent solvents.", "cfr_ref": "40 CFR 261.31" },
+  {
+    "code": "F001",
+    "type": "F-listed",
+    "title": "Spent halogenated solvents used in degreasing",
+    "description": "e.g., TCE, PCE used in degreasing operations (spent).",
+    "cfr_ref": "40 CFR 261.31",
+    "cfr_url": "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-I/part-261/section-261.31",
+    "last_updated": "2025-09-25"
+  },
+  {
+    "code": "F003",
+    "type": "F-listed",
+    "title": "Spent non-halogenated solvents",
+    "description": "e.g., acetone, methanol (spent).",
+    "cfr_ref": "40 CFR 261.31",
+    "cfr_url": "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-I/part-261/section-261.31",
+    "last_updated": "2025-09-25"
+  },
+  {
+    "code": "F005",
+    "type": "F-listed",
+    "title": "Other non-halogenated spent solvents",
+    "description": "e.g., toluene, MEK (spent).",
+    "cfr_ref": "40 CFR 261.31",
+    "cfr_url": "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-I/part-261/section-261.31",
+    "last_updated": "2025-09-25"
+  },
 
-  { "code": "K001", "type": "K-listed", "title": "Bottom sediment sludge from untreated process wastewater from wood preserving", "description": "Industry-specific waste from wood preserving (creosote).", "cfr_ref": "40 CFR 261.32" },
+  {
+    "code": "K001",
+    "type": "K-listed",
+    "title": "Bottom sludge from wood preserving (untreated wastewater)",
+    "description": "Industry-specific listing for wood preserving (creosote).",
+    "cfr_ref": "40 CFR 261.32",
+    "cfr_url": "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-I/part-261/section-261.32",
+    "last_updated": "2025-09-25"
+  },
 
-  { "code": "P030", "type": "P-listed", "title": "Cyanides (various) – acutely hazardous", "description": "Commercial chemical products listed as acute hazardous wastes.", "cfr_ref": "40 CFR 261.33(e)" },
-  { "code": "U002", "type": "U-listed", "title": "Acetone", "description": "Commercial chemical product discarded or spilled (unused).", "cfr_ref": "40 CFR 261.33(f)" }
+  {
+    "code": "P030",
+    "type": "P-listed",
+    "title": "Cyanides (acutely hazardous)",
+    "description": "Certain commercial chemical products listed as acute hazardous waste.",
+    "cfr_ref": "40 CFR 261.33(e)",
+    "cfr_url": "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-I/part-261/section-261.33",
+    "last_updated": "2025-09-25"
+  },
+  {
+    "code": "U002",
+    "type": "U-listed",
+    "title": "Acetone",
+    "description": "Unused commercial chemical product when discarded or spilled.",
+    "cfr_ref": "40 CFR 261.33(f)",
+    "cfr_url": "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-I/part-261/section-261.33",
+    "last_updated": "2025-09-25"
+  }
 ]
