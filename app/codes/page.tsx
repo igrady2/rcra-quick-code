@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { WASTE_CODES, type WasteCode } from "@/data/waste_codes.sample";
+import wasteJson from "@/data/waste_codes.json";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -13,6 +13,15 @@ import { Button } from "@/components/ui/button";
  * - Table uses semantic headers (scope attributes)
  * - Ready to extend with actions (e.g., Copy, Print Label)
  */
+type WasteCode = {
+  code: string;
+  type: string;
+  title: string;
+  description: string;
+  cfr_ref: string;
+};
+const WASTE_CODES = wasteJson as WasteCode[];
+
 export default function CodesPage() {
   const [q, setQ] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
